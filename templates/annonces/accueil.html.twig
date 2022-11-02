@@ -24,8 +24,14 @@
             <th scope="row">{{ annonce.poste }}</th>
             <td>{{ annonce.lieuDeTravail }}</td>
             <td>{{ annonce.description }}</td>
+            <td><button class="btn btn-success">Postuler</button></td>
+            {% if is_granted('ROLE_RECRUTEUR') %}
+            <td><button class="btn btn-success">Ajouter</button></td>
+            {% endif %}
         </tr>
         {% endfor %}
+
+
         </tbody>
     </table>
 
