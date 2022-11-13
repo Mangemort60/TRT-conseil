@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}offres d'emploi{% endblock %}
+
+{% block body %}
+<div class="container d-flex flex-column">
+    <h1 class="text-center m-4">offres d'emploi</h1>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Poste</th>
+            <th scope="col">Lieu de travail</th>
+            <th scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        {#        boucle pour afficher chaque annonce#}
+        {% for annonce in annonces %}
+            {#          loop.index pour alterner les couleurs du tableau#}
+            <tr class="table-{%if loop.index is odd  %}light{% else %}dark{% endif %}">
+                <th scope="row">{{ annonce.poste }}</th>
+                <td>{{ annonce.lieuDeTravail }}</td>
+                <td>{{ annonce.description }}</td>
+                {% if is_granted('ROLE_CANDIDAT') %}
+                    <td><a class="btn btn-success" href="#" role="button">Postuler</a></td>
+                {% endif %}
+            </tr>
+
+
+        {% endfor %}
+
+
+        </tbody>
+    </table>
+    {% if is_granted('ROLE_RECRUTEUR') %}
+        <a class="btn btn-success" href="{{path('app_recruteur_ajouter_annonce')}}" role="button">Ajouter</a>
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

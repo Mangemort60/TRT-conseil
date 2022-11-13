@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container d-flex flex-column">
+    {% for message in app.flashes('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    <h1 class="text-center">Vos informations de profil</h1>
+    <ul class="list-group m-4">
+        {% for candidat in candidats %}
+            <li class="list-group-item"><b>Nom :</b> {{candidat.nom}}</li>
+            <li class="list-group-item"><b>Prenom :</b> {{candidat.prenom}}</li>
+        {% endfor %}
+    </ul>
+    <a class="btn btn-success" href="{{path('app_candidat_add')}}" role="button">Completer profil</a>
+    </div>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

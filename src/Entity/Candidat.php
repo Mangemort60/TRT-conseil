@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\CandidatRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: CandidatRepository::class)]
+#[Vich\Uploadable]
 class Candidat
 {
     #[ORM\Id]
@@ -15,25 +16,22 @@ class Candidat
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $prenom = null;
 
-    #[ORM\ManyToOne(inversedBy: 'candidats')]
+
+    #[ORM\ManyToOne]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'candidat', targetEntity: Candidature::class)]
-    private Collection $candidatures;
+    #[Vich\UploadableField(mapping: 'cv', fileNameProperty: 'cvName')]
+    private ?File $cvFile = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Cv = null;
+    #[ORM\Column(type: 'string')]
+    private ?string $cvName = null;
 
-    public function __construct()
-    {
-        $this->candidatures = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -45,7 +43,7 @@ class Candidat
         return $this->nom;
     }
 
-    public function setNom(string $nom): self
+    public function setNom(?string $nom): self
     {
         $this->nom = $nom;
 
@@ -57,7 +55,7 @@ class Candidat
         return $this->prenom;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setPrenom(?string $prenom): self
     {
         $this->prenom = $prenom;
 
@@ -76,45 +74,29 @@ class Candidat
         return $this;
     }
 
-    /**
-     * @return Collection<int, Candidature>
-     */
-    public function getCandidatures(): Collection
+    public function setCvFile(?File $cvFile = null): void
     {
-        return $this->candidatures;
-    }
+        $this->cvFile = $cvFile;
 
-    public function addCandidature(Candidature $candidature): self
-    {
-        if (!$this->candidatures->contains($candidature)) {
-            $this->candidatures->add($candidature);
-            $candidature->setCandidat($this);
+        if (null !== $cvFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
         }
-
-        return $this;
     }
 
-    public function removeCandidature(Candidature $candidature): self
+    public function getCvFile(): ?File
     {
-        if ($this->candidatures->removeElement($candidature)) {
-            // set the owning side to null (unless already changed)
-            if ($candidature->getCandidat() === $this) {
-                $candidature->setCandidat(null);
-            }
-        }
-
-        return $this;
+        return $this->cvFile;
     }
 
-    public function getCv(): ?string
+    public function setCvName(?string $cvName): void
     {
-        return $this->Cv;
+        $this->cvName = $cvName;
     }
 
-    public function setCv(?string $Cv): self
+    public function getCvName(): ?string
     {
-        $this->Cv = $Cv;
-
-        return $this;
+        return $this->cvName;
     }
 }

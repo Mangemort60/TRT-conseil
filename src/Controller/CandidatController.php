@@ -3,84 +3,65 @@
 namespace App\Controller;
 
 use App\Entity\Candidat;
-use App\Entity\User;
 use App\Form\CandidatType;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
+
+
 
 class CandidatController extends AbstractController
 {
+    #[Route('/candidat/monProfil', name: 'app_profil_candidat')]
+    public function afficher( EntityManagerInterface $entityManager, UserInterface $user): Response
+    {
 
-        #[Route('/candidat/profil', name: 'app_candidat_profil')]
-        public function add(EntityManagerInterface $entityManager, Request $request, UserInterface $user, SluggerInterface $slugger): Response
-        {
-            // instance de candidat
-            $candidat = new Candidat();
-            // creer formulaire et liaison à l'entité classe
-            $form = $this->createForm(CandidatType::class, $candidat);
-            // traitement du formulaire
-            $form->handleRequest($request);
-            // si formulaire valide
-            if($form->isSubmitted() && $form->isValid()) {
-                // récupère le cv
-                $cv = $form->get('Cv')->getData();
-                // si il y a un cv
-                if($cv) {
-                    $originalFilename = pathinfo($cv->getClientOriginalName(), PATHINFO_FILENAME);
-                    // this is needed to safely include the file name as part of the URL
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$cv->guessExtension();
-                    try {
-                        $cv->move(
-                            $this->getParameter('cv_directory'),
-                            $newFilename
+        $userId = $user->getID();
+        $candidat = $entityManager->getRepository(Candidat::class)->findBy(['user' => $userId]);
 
-                        );
-                    } catch (FileException $e) {
+        return $this->render('candidat/candidat-profil.html.twig', ['candidats' => $candidat]);
+    }
 
-                    }
 
-                }
+    #[Route('/candidat/add', name: 'app_candidat_add')]
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $candidat = new Candidat();
 
-                $user->getUserIdentifier();
-                $candidat->setUser($user);
+        $form = $this->createForm(CandidatType::class, $candidat);
+        $form->handleRequest($request);
+
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+                $userId = $this->getUser();
+                $candidat->setUser($userId);
+                $candidat = $form->getData();
                 $entityManager->persist($candidat);
-                $entityManager->flush($candidat);
-                
-                return $this->redirectToRoute('app_annonces');
-            }
+                $entityManager->flush();
+                return $this->redirectToRoute('app_profil_candidat');
 
-            return $this->render('candidat/candidat.compte.index.html.twig', [
+
+        } else {
+
+            return $this->render('candidat/completer-profil.html.twig', [
                 'form' => $form->createView()
             ]);
         }
 
-//    #[Route('/candidat', name: 'app_candidat')]
-//    public function index(Request $request, EntityManagerInterface $entityManager): Response
-//    {
-//        // on va chercher l'entité
-//        $candidat = new Candidat();
-//
-//        // creation du formulaire et liaison a l'entité
-//        $form = $this->createForm(CandidatType::class, $candidat);
-//
-//        // traitement du formulaire
-//        $form->handleRequest($request);
-//        if($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->persist($candidat);
-//            $entityManager->flush($candidat);
-//        }
-//
-//        // rendu du formulaire
-//        return $this->render('candidat/candidat.compte.index.html.twig', [
-//            'form' => $form->createView(),
-//        ]);
-//    }
+
+    }
+
+
+    
+
 }

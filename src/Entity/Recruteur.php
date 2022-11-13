@@ -15,22 +15,23 @@ class Recruteur
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $nomEntreprise = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse = null;
+
+    #[ORM\ManyToOne]
+    private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'recruteur', targetEntity: Annonce::class)]
     private Collection $annonces;
-
-    #[ORM\ManyToOne(inversedBy: 'recruteurs')]
-    private ?User $user = null;
 
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -42,7 +43,7 @@ class Recruteur
         return $this->nomEntreprise;
     }
 
-    public function setNomEntreprise(string $nomEntreprise): self
+    public function setNomEntreprise(?string $nomEntreprise): self
     {
         $this->nomEntreprise = $nomEntreprise;
 
@@ -54,9 +55,21 @@ class Recruteur
         return $this->adresse;
     }
 
-    public function setAdresse(string $adresse): self
+    public function setAdresse(?string $adresse): self
     {
         $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getUser(): ?self
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
@@ -91,15 +104,4 @@ class Recruteur
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 }

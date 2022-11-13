@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Candidat{% endblock %}
+
+{% block body %}
+
+    {% for message in app.flashes('error') %}
+<div class="alert alert-danger">
+    {{ message }}
+</div>
+    {% endfor %}
+<h1 class="text-center">completer mon profil</h1>
+
+
+    {{ form_start(form) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.prenom) }}
+        {{ form_row(form.cvFile) }}
+        {{ form_row(form.cvName) }}
+        {{ form_row(form.Enregistrer) }}
+    {{ form_end(form) }}
+{% endblock %}

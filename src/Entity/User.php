@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -31,25 +29,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Candidat::class)]
-    private Collection $candidats;
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Candidat $Candidat = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Recruteur::class)]
-    private Collection $recruteurs;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Consultant::class)]
-    private Collection $consultants;
-
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Admin::class)]
-    private Collection $admins;
-
-    public function __construct()
-    {
-        $this->candidats = new ArrayCollection();
-        $this->recruteurs = new ArrayCollection();
-        $this->consultants = new ArrayCollection();
-        $this->admins = new ArrayCollection();
-    }
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Recruteur $Recruteur = null;
 
     public function getId(): ?int
     {
@@ -121,122 +105,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection<int, Candidat>
-     */
-    public function getCandidats(): Collection
+    public function getCandidat(): ?Candidat
     {
-        return $this->candidats;
+        return $this->Candidat;
     }
 
-    public function addCandidat(Candidat $candidat): self
+    public function setCandidat(?Candidat $Candidat): self
     {
-        if (!$this->candidats->contains($candidat)) {
-            $this->candidats->add($candidat);
-            $candidat->setUser($this);
-        }
+        $this->Candidat = $Candidat;
 
         return $this;
     }
 
-    public function removeCandidat(Candidat $candidat): self
+    public function getRecruteur(): ?Recruteur
     {
-        if ($this->candidats->removeElement($candidat)) {
-            // set the owning side to null (unless already changed)
-            if ($candidat->getUser() === $this) {
-                $candidat->setUser(null);
-            }
-        }
-
-        return $this;
+        return $this->Recruteur;
     }
 
-    /**
-     * @return Collection<int, Recruteur>
-     */
-    public function getRecruteurs(): Collection
+    public function setRecruteur(?Recruteur $Recruteur): self
     {
-        return $this->recruteurs;
-    }
-
-    public function addRecruteur(Recruteur $recruteur): self
-    {
-        if (!$this->recruteurs->contains($recruteur)) {
-            $this->recruteurs->add($recruteur);
-            $recruteur->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRecruteur(Recruteur $recruteur): self
-    {
-        if ($this->recruteurs->removeElement($recruteur)) {
-            // set the owning side to null (unless already changed)
-            if ($recruteur->getUser() === $this) {
-                $recruteur->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Consultant>
-     */
-    public function getConsultants(): Collection
-    {
-        return $this->consultants;
-    }
-
-    public function addConsultant(Consultant $consultant): self
-    {
-        if (!$this->consultants->contains($consultant)) {
-            $this->consultants->add($consultant);
-            $consultant->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeConsultant(Consultant $consultant): self
-    {
-        if ($this->consultants->removeElement($consultant)) {
-            // set the owning side to null (unless already changed)
-            if ($consultant->getUser() === $this) {
-                $consultant->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Admin>
-     */
-    public function getAdmins(): Collection
-    {
-        return $this->admins;
-    }
-
-    public function addAdmin(Admin $admin): self
-    {
-        if (!$this->admins->contains($admin)) {
-            $this->admins->add($admin);
-            $admin->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAdmin(Admin $admin): self
-    {
-        if ($this->admins->removeElement($admin)) {
-            // set the owning side to null (unless already changed)
-            if ($admin->getUser() === $this) {
-                $admin->setUser(null);
-            }
-        }
+        $this->Recruteur = $Recruteur;
 
         return $this;
     }

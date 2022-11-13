@@ -5,21 +5,52 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse ml-auto" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav me-auto d-flex">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{path('app_annonces')}}">Accueil
+                    <a class="nav-link" href="{{path('app_annonces')}}">Accueil
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{path('app_candidat_profil')}}">Mon compte</a>
+                <li class="nav-item dropdown">
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false">Mon compte</a>
+                    {% endif %}
+                    <div class="dropdown-menu">
+                        {% if is_granted('ROLE_CANDIDAT') %}
+                        <a class="dropdown-item" href="{{ path('app_profil_candidat') }}">Mes informations</a>
+                        {% endif %}
+                        {% if is_granted('ROLE_RECRUTEUR') %}
+                            <a class="dropdown-item" href="{{ path('app_profil_recruteur') }}">Mes informations</a>
+                        {% endif %}
+                        {% if is_granted('ROLE_RECRUTEUR') %}
+                        <a class="dropdown-item" href="#">Mes annonces</a>
+                        {% endif %}
+                        {% if is_granted('ROLE_CANDIDAT') %}
+                        <a class="dropdown-item" href="#">Mes candidatures</a>
+                        {% endif %}
+                        {% if is_granted('ROLE_RECRUTEUR') %}
+                            <a class="dropdown-item" href="#">Mes candidatures</a>
+                        {% endif %}
+
+                    </div>
                 </li>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_login') }}">Log In</a>
+                    </li>
+                {% endif %}
+                {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{path('app_login')}}">Log In</a>
+                    <a class="nav-link" href="{{ path('app_register') }}">Register</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{path('app_logout')}}">Log Out</a>
-                </li>
+                {% endif %}
+
+
+
             </ul>
 
         </div>
