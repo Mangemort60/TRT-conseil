@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h2 class="text-center m-4">Mes candidatures</h2>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Poste</th>
+                <th scope="col">Lieu de travail</th>
+                <th scope="col">Description</th>
+                <th scope="col">Entreprise</th>
+
+
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for candidature in candidatures %}
+                {% if candidature.active == true %}
+                    <tr class="table-light">
+                        <th scope="row">{{ candidature.poste }}</th>
+                        <td>{{ candidature.lieuDeTravail }}</td>
+                        <td>{{ candidature.description }}</td>
+                        <td>{{ candidature.recruteur}}</td>
+
+
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

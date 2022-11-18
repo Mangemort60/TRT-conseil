@@ -27,9 +27,15 @@ class Recruteur
     #[ORM\OneToMany(mappedBy: 'recruteur', targetEntity: Annonce::class)]
     private Collection $annonces;
 
+    #[ORM\OneToMany(mappedBy: 'recruteur', targetEntity: Candidature::class)]
+    private Collection $candidatures;
+
+
+
     public function __construct()
     {
         $this->annonces = new ArrayCollection();
+        $this->candidatures = new ArrayCollection();
     }
 
 
@@ -62,7 +68,7 @@ class Recruteur
         return $this;
     }
 
-    public function getUser(): ?self
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -103,5 +109,39 @@ class Recruteur
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Candidature>
+     */
+    public function getCandidatures(): Collection
+    {
+        return $this->candidatures;
+    }
+
+    public function addCandidature(Candidature $candidature): self
+    {
+        if (!$this->candidatures->contains($candidature)) {
+            $this->candidatures->add($candidature);
+            $candidature->setRecruteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidature(Candidature $candidature): self
+    {
+        if ($this->candidatures->removeElement($candidature)) {
+            // set the owning side to null (unless already changed)
+            if ($candidature->getRecruteur() === $this) {
+                $candidature->setRecruteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
 
 }

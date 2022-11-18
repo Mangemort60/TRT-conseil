@@ -18,15 +18,16 @@
         {#        boucle pour afficher chaque annonce#}
         {% for annonce in annonces %}
             {#          loop.index pour alterner les couleurs du tableau#}
-            <tr class="table-{%if loop.index is odd  %}light{% else %}dark{% endif %}">
+            {% if annonce.active == true %}
+            <tr class="table-light">
                 <th scope="row">{{ annonce.poste }}</th>
                 <td>{{ annonce.lieuDeTravail }}</td>
                 <td>{{ annonce.description }}</td>
                 {% if is_granted('ROLE_CANDIDAT') %}
-                    <td><a class="btn btn-success" href="#" role="button">Postuler</a></td>
+                    <td><a class="btn btn-success" href="{{path('app_candidat_postuler', {id: annonce.id})}}" role="button">Postuler</a></td>
                 {% endif %}
             </tr>
-
+            {% endif %}
 
         {% endfor %}
 

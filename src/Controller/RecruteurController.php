@@ -6,7 +6,10 @@ use App\Entity\Annonce;
 use App\Entity\Recruteur;
 use App\Form\AnnonceType;
 use App\Form\RecruteurType;
+use App\Repository\CandidatureRepository;
+use App\Repository\RecruteurRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use http\Client\Curl\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,7 +61,7 @@ class RecruteurController extends AbstractController
     }
 
     #[Route('/recruteur/ajouter_annonce', name:'app_recruteur_ajouter_annonce')]
-    public function addAnnonce(Request $request, EntityManagerInterface $entityManager) : Response {
+    public function addAnnonce(Request $request, EntityManagerInterface $entityManager, UserInterface $user, RecruteurRepository $recruteurRepository) : Response {
 
         $annonce = new Annonce();
 
@@ -67,9 +70,16 @@ class RecruteurController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $form->getData();
+
+            $userId = $user->getID();
+            $recruteur = $recruteurRepository->findOneBySomeField($userId);
+            $recruteurNom = $recruteur->getNomEntreprise();
+            $annonce->setRecruteur($recruteur);
+            $annonce->setEntreprise($recruteurNom);
             $entityManager->persist($annonce);
             $entityManager->flush();
             return $this->redirectToRoute('app_annonces');
+
         } else {
             return $this->renderForm('annonce/ajouter.html.twig', [
                 'form' => $form,
@@ -80,6 +90,17 @@ class RecruteurController extends AbstractController
 
     }
 
+    #[Route('/recruteur/afficher_candidature', name:'app_recruteur_afficher_candidature')]
+    public function afficherCandidature(EntityManagerInterface $entityManager, UserInterface $user, CandidatureRepository $candidatureRepository, RecruteurRepository $recruteurRepository) : Response {
 
+        // trouve le recruteur connecté
+    $recruteur = $recruteurRepository->findOneBySomeField($user);
+        // trouve les candidatures liée au recruteur
+    $candidatures = $candidatureRepository->findBy(['recruteur' => $recruteur]);
+
+
+
+    return $this->render('recruteur/recruteur-candidature-afficher.twig', ['candidatures' => $candidatures]);
+    }
 }
 

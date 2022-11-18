@@ -22,14 +22,20 @@
                         {% if is_granted('ROLE_RECRUTEUR') %}
                             <a class="dropdown-item" href="{{ path('app_profil_recruteur') }}">Mes informations</a>
                         {% endif %}
-                        {% if is_granted('ROLE_RECRUTEUR') %}
-                        <a class="dropdown-item" href="#">Mes annonces</a>
-                        {% endif %}
                         {% if is_granted('ROLE_CANDIDAT') %}
-                        <a class="dropdown-item" href="#">Mes candidatures</a>
+                        <a class="dropdown-item" href="{{ path('app_candidat_afficher_candidature') }}">Mes candidatures</a>
                         {% endif %}
                         {% if is_granted('ROLE_RECRUTEUR') %}
-                            <a class="dropdown-item" href="#">Mes candidatures</a>
+                            <a class="dropdown-item" href="{{ path('app_recruteur_afficher_candidature') }}">Mes candidatures</a>
+                        {% endif %}
+                        {% if is_granted('ROLE_CONSULTANT') %}
+                            <a class="dropdown-item" href="{{ path('app_afficher_candidature') }}">Mes candidatures à valider</a>
+                        {% endif %}
+                        {% if is_granted('ROLE_CONSULTANT') %}
+                            <a class="dropdown-item" href="{{ path('app_consultant_annonces_afficher') }}">Mes annonces à valider</a>
+                        {% endif %}
+                        {% if is_granted('ROLE_CONSULTANT') %}
+                            <a class="dropdown-item" href="{{ path('app_afficher_comptes') }}">Comptes à valider</a>
                         {% endif %}
 
                     </div>

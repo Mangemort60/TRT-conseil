@@ -22,6 +22,7 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('email', EmailType::class)
             ->add('roles', ChoiceType::class, [
+                'label' => 'Vous êtes',
                 'required' => true,
                 'multiple' => false,
                 'expanded' => false,

@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Candidat;
+use App\Entity\Candidature;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Candidat>
+ * @extends ServiceEntityRepository<Candidature>
  *
- * @method Candidat|null find($id, $lockMode = null, $lockVersion = null)
- * @method Candidat|null findOneBy(array $criteria, array $orderBy = null)
- * @method Candidat[]    findAll()
- * @method Candidat[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Candidature|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Candidature|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Candidature[]    findAll()
+ * @method Candidature[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CandidatRepository extends ServiceEntityRepository
+class CandidatureRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Candidat::class);
+        parent::__construct($registry, Candidature::class);
     }
 
-    public function save(Candidat $entity, bool $flush = false): void
+    public function save(Candidature $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class CandidatRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Candidat $entity, bool $flush = false): void
+    public function remove(Candidature $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class CandidatRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Candidat[] Returns an array of Candidat objects
+//     * @return Candidature[] Returns an array of Candidature objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,10 +54,10 @@ class CandidatRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-    public function findOneBySomeField($value): ?Candidat
+    public function findOneBySomeField($value): ?Candidature
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.user = :val')
+            ->andWhere('c.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

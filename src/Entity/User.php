@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -29,11 +32,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?Candidat $Candidat = null;
+    #[ORM\Column(nullable: true)]
+    private ?bool $Active = null;
 
-    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?Recruteur $Recruteur = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $deletedAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $expiredAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Candidat::class)]
+    private Collection $candidat;
+
+
+    public function __construct()
+    {
+        $this->candidat = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,27 +120,85 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getCandidat(): ?Candidat
+
+    public function isActive(): ?bool
     {
-        return $this->Candidat;
+        return $this->Active;
     }
 
-    public function setCandidat(?Candidat $Candidat): self
+    public function setActive(?bool $Active): self
     {
-        $this->Candidat = $Candidat;
+        $this->Active = $Active;
 
         return $this;
     }
 
-    public function getRecruteur(): ?Recruteur
+    public function getDeletedAt(): ?\DateTimeInterface
     {
-        return $this->Recruteur;
+        return $this->deletedAt;
     }
 
-    public function setRecruteur(?Recruteur $Recruteur): self
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): self
     {
-        $this->Recruteur = $Recruteur;
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }
+
+    public function getExpiredAt(): ?\DateTimeInterface
+    {
+        return $this->expiredAt;
+    }
+
+    public function setExpiredAt(?\DateTimeInterface $expiredAt): self
+    {
+        $this->expiredAt = $expiredAt;
+
+        return $this;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deletedAt !== null;
+    }
+
+    public function isExpired(): bool
+    {
+        return $this->expiredAt !== null && $this->expiredAt < new \DateTime();
+
+    }
+
+    /**
+     * @return Collection<int, Candidat>
+     */
+    public function getCandidat(): Collection
+    {
+        return $this->candidat;
+    }
+
+    public function addCandidat(Candidat $candidat): self
+    {
+        if (!$this->candidat->contains($candidat)) {
+            $this->candidat->add($candidat);
+            $candidat->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidat(Candidat $candidat): self
+    {
+        if ($this->candidat->removeElement($candidat)) {
+            // set the owning side to null (unless already changed)
+            if ($candidat->getUser() === $this) {
+                $candidat->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
 }

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container d-flex flex-column">
+    <h2 class="text-center m-4">Comptes en attente de validation</h2>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">EMAIL</th>
+            <th scope="col">STATUT</th>
+            <th scope="col">Action</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {#        boucle pour afficher chaque annonce#}
+        {% for user in users %}
+
+        {#          loop.index pour alterner les couleurs du tableau#}
+
+        <tr class="table-light">
+            {% if user.roles != ["ROLE_ADMIN", "ROLE_USER"] and user.active == false %}
+            <th scope="row">{{ user.email }}</th>
+            <th scope="col">{% if user.active %} activé {% else%} en attente {% endif %}</th>
+            <th><a class="btn btn-success" href="{{path('app_valider_comptes', {id: user.id})}}" role="button">activer</a></th>
+
+            {% endif %}
+        </tr>
+
+        {% endfor %}
+        <tbody>
+    </table>
+
+
+    <h2 class="text-center m-4">Comptes validés</h2>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">EMAIL</th>
+            <th scope="col">ACTION</th>
+            <th scope="col">STATUT</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+
+            <tr class="table-light">
+                {% if user.roles != ["ROLE_ADMIN", "ROLE_USER"] and user.active == true %}
+                    <th scope="row">{{ user.email }}</th>
+                    <th><a class="btn btn-danger" href="{{path('app_desactiver_comptes', {id: user.id})}}" role="button">désactiver</a></th>
+                    <th scope="col">{% if user.active %} activé {% else%} en attente {% endif %}</th>
+                {% endif %}
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+        {% endblock %}
+
+{% block title %}{% endblock %}

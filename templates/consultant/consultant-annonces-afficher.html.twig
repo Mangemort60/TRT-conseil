@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes annonces à valider{% endblock %}
+
+{% block body %}
+
+
+
+
+        <div class="container d-flex flex-column">
+            <h1 class="text-center mt-4">Annonces en attente de validation</h1>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Poste</th>
+                    <th scope="col">Lieu de travail</th>
+                    <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {#        boucle pour afficher chaque annonce#}
+                {% for annonce in annonces %}
+                    {#          loop.index pour alterner les couleurs du tableau#}
+                    {% if annonce.active == false %}
+                    <tr class="table-light">
+                        <th scope="row">{{ annonce.poste }}</th>
+                        <td>{{ annonce.lieuDeTravail }}</td>
+                        <td>{{ annonce.description }}</td>
+                            <td><a class="btn btn-success" href="{{path('app_valider_annonce', {id: annonce.id})}}" role="button">Valider</a></td>
+                    </tr>
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+                </tbody>
+            </table>
+    </div>
+
+{% endblock %}

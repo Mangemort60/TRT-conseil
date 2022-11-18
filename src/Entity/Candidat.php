@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CandidatRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -23,14 +24,23 @@ class Candidat
     private ?string $prenom = null;
 
 
-    #[ORM\ManyToOne]
-    private ?User $user = null;
-
     #[Vich\UploadableField(mapping: 'cv', fileNameProperty: 'cvName')]
     private ?File $cvFile = null;
 
     #[ORM\Column(type: 'string')]
     private ?string $cvName = null;
+
+    #[ORM\ManyToOne(inversedBy: 'candidat')]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'candidat')]
+    private ?Candidature $candidature = null;
+
+
+    public function __construct()
+    {
+
+    }
 
 
     public function getId(): ?int
@@ -62,17 +72,6 @@ class Candidat
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     public function setCvFile(?File $cvFile = null): void
     {
@@ -99,4 +98,32 @@ class Candidat
     {
         return $this->cvName;
     }
+
+
+public function getUser(): ?User
+{
+    return $this->user;
+}
+
+public function setUser(?User $user): self
+{
+    $this->user = $user;
+
+    return $this;
+}
+
+public function getCandidature(): ?Candidature
+{
+    return $this->candidature;
+}
+
+public function setCandidature(?Candidature $candidature): self
+{
+    $this->candidature = $candidature;
+
+    return $this;
+}
+
+
+
 }

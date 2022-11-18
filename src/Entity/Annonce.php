@@ -22,8 +22,18 @@ class Annonce
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $Active = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $entreprise = null;
+
+    #[ORM\ManyToOne(inversedBy: 'annonce')]
+    private ?Candidature $candidature = null;
+
     #[ORM\ManyToOne(inversedBy: 'annonces')]
     private ?Recruteur $recruteur = null;
+
 
     public function getId(): ?int
     {
@@ -66,6 +76,43 @@ class Annonce
         return $this;
     }
 
+
+    public function isActive(): ?bool
+    {
+        return $this->Active;
+    }
+
+    public function setActive(?bool $Active): self
+    {
+        $this->Active = $Active;
+
+        return $this;
+    }
+
+    public function getEntreprise(): ?string
+    {
+        return $this->entreprise;
+    }
+
+    public function setEntreprise(?string $entreprise): self
+    {
+        $this->entreprise = $entreprise;
+
+        return $this;
+    }
+
+    public function getCandidature(): ?Candidature
+    {
+        return $this->candidature;
+    }
+
+    public function setCandidature(?Candidature $candidature): self
+    {
+        $this->candidature = $candidature;
+
+        return $this;
+    }
+
     public function getRecruteur(): ?Recruteur
     {
         return $this->recruteur;
@@ -77,4 +124,9 @@ class Annonce
 
         return $this;
     }
+
+
+
+
+
 }

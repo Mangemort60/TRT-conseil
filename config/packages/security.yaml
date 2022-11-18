@@ -20,7 +20,7 @@ security:
             logout:
                 path: app_logout
             custom_authenticator: App\Security\LoginAuthenticator
-
+            user_checker: App\Security\UserChecker
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -34,7 +34,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/profile, roles: ROLE_USER }
+#         - { path: ^/profile, roles: ROLE_USER }
 
     role_hierarchy:
         ROLE_CANDIDAT: ROLE_CANDIDAT

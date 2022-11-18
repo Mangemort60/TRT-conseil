@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AnnonceController extends AbstractController
 {
-    #[Route('/annonces', name: 'app_annonces')]
+    #[Route('/', name: 'app_annonces')]
     public function index(EntityManagerInterface $entityManager, AnnonceRepository $annonceRepository): Response
     {
         $annonce = $annonceRepository->findAll();
