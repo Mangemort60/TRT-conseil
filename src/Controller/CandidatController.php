@@ -65,35 +65,44 @@ class CandidatController extends AbstractController
     public function postuler(EntityManagerInterface $entityManager,CandidatRepository $candidatRepository, UserInterface $user, Annonce $annonce, CandidatureRepository $candidatureRepository): Response
     {
 
-        // user ID du user connecté
-        $userId = $user->getID();
+            // user ID du user connecté
+            $userId = $user->getID();
 
-        // récupère détail de l'annonce
-        $poste = $annonce->getPoste();
-        $lieuDeTravail = $annonce->getLieuDeTravail();
-        $description = $annonce->getLieuDeTravail();
-        $recruteur = $annonce->getRecruteur();
+            // récupère détail de l'annonce
+            $poste = $annonce->getPoste();
+            $lieuDeTravail = $annonce->getLieuDeTravail();
+            $description = $annonce->getLieuDeTravail();
+            $recruteur = $annonce->getRecruteur();
 
-        // candidat connecté
-        $candidatLoggedIn = $candidatRepository->findOneBySomeField($userId);
-        $candidatNom = $candidatLoggedIn->getNom();
-        $candidatPrenom = $candidatLoggedIn->getPrenom();
-        $candidatEmail = $user->getUserIdentifier();
+            // candidat connecté
+            $candidatLoggedIn = $candidatRepository->findOneBySomeField($userId);
 
-        // nouvelle candidature
-        $candidature = new Candidature();
-        $candidature->setNom($candidatNom);
-        $candidature->setPrenom($candidatPrenom);
-        $candidature->setPoste($poste);
-        $candidature->setLieuDeTravail($lieuDeTravail);
-        $candidature->setDescription($description);
-        $candidature->setCandidatEmail($candidatEmail);
-        $candidature->setRecruteur($recruteur);
+            if ($candidatLoggedIn) {
+                
+                $candidatNom = $candidatLoggedIn->getNom();
+                $candidatPrenom = $candidatLoggedIn->getPrenom();
+                $candidatEmail = $user->getUserIdentifier();
+                $candidatCv = $candidatLoggedIn->getCvName();
 
-        $entityManager->persist($candidature);
-        $entityManager->flush();
+                // nouvelle candidature
+                $candidature = new Candidature();
+                $candidature->setNom($candidatNom);
+                $candidature->setPrenom($candidatPrenom);
+                $candidature->setPoste($poste);
+                $candidature->setLieuDeTravail($lieuDeTravail);
+                $candidature->setDescription($description);
+                $candidature->setCandidatEmail($candidatEmail);
+                $candidature->setRecruteur($recruteur);
+                $candidature->setCv($candidatCv);
 
-//        $this->addFlash('success', 'votre candidature a bien été transmise');
+                $entityManager->persist($candidature);
+                $entityManager->flush();
+
+            } else {
+                $this->addFlash('error', 'Veuillez devez compléter votre profil afin de pouvoir postuler à une annonce');
+                return $this->redirectToRoute('app_annonces');
+            }
+
 
 
 
@@ -101,15 +110,7 @@ class CandidatController extends AbstractController
         return $this->redirectToRoute('app_annonces');
     }
 
-    #[Route('/candidat/afficher-candidature', name: 'app_candidat_afficher_candidature')]
-    public function afficherCandidature( CandidatureRepository $candidatureRepository, CandidatRepository $candidatRepository): Response
-    {
-        $candidatId =
-        $candidatures = $candidatureRepository->findAll();
-        dd($candidatures);
 
-        return $this->render('candidat/candidat-candidature-afficher.html.twig', ['candidatures'=> $candidatures]);
-    }
 
     
 

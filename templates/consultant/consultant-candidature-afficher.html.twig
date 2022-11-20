@@ -17,7 +17,6 @@
                 <th scope="col">Prenom</th>
                 <th scope="col">Email</th>
                 <th scope="col">Action</th>
-                <th scope="col">Statut</th>
 
             </tr>
             </thead>
@@ -31,7 +30,6 @@
                 <td>{{ candidature.prenom }}</td>
                 <td>{{ candidature.candidatEmail }}</td>
                 <td><a class="btn btn-success" href="{{ path('app_valider_candidature', {id: candidature.id}) }}" role="button">Valider</a></td>
-                <th scope="col">{% if candidature.active %} activé {% else%} en attente {% endif %}</th>
             </tr>
             {% endfor %}
             </tbody>

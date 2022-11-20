@@ -11,6 +11,9 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ConsultantController extends AbstractController
@@ -86,14 +89,31 @@ class ConsultantController extends AbstractController
 
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     #[Route('/valider_candidature/{id}', name: 'app_valider_candidature')]
-    public function validerCandidature(EntityManagerInterface $entityManager, Candidature $candidature): Response
+    public function validerCandidature(EntityManagerInterface $entityManager, Candidature $candidature, MailerInterface $mailer): Response
     {
 
-
+        // valide la candidature
         $candidature->setActive('1');
         $entityManager->persist($candidature);
         $entityManager->flush();
+
+        // on recupere nom , prenom , cv du candidat
+
+
+        // envoyer email au recruteur
+
+        $email = (new Email())
+            ->from('hahaddaoui@gmail.com')
+            ->to('hahaddaoui@gmail.com')
+            ->subject('nouvelle candidature')
+            ->text('Bonjour, nous avons une nouvelle candidature a vous proposer...');
+
+        $mailer->send($email);
+
         return $this->redirectToRoute('app_afficher_candidature', );
 
 
