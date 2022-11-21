@@ -5,6 +5,11 @@
     {% for message in app.flashes('success') %}
     <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
+        {% for message in app.flashes('errorAlreadyCompleted') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+
+
     <h1 class="text-center">Vos informations de profil</h1>
     <ul class="list-group m-4">
         {% for candidat in candidats %}

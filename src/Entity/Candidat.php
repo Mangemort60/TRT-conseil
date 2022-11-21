@@ -5,11 +5,14 @@ namespace App\Entity;
 use App\Repository\CandidatRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: CandidatRepository::class)]
 #[Vich\Uploadable]
+#[UniqueEntity("user")]
+
 class Candidat
 {
     #[ORM\Id]

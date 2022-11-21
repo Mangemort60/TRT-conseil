@@ -20,6 +20,9 @@
                 <tbody>
                 {#        boucle pour afficher chaque annonce#}
                 {% for annonce in annonces %}
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">{{ message }}</div>
+                    {% endfor %}
                     {#          loop.index pour alterner les couleurs du tableau#}
                     {% if annonce.active == false %}
                     <tr class="table-light">

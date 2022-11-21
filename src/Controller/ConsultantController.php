@@ -22,6 +22,8 @@ class ConsultantController extends AbstractController
     public function afficherAnnonces(EntityManagerInterface $entityManager, AnnonceRepository $annonceRepository): Response
     {
         $annonce = $annonceRepository->findAll();
+
+
         return $this->render('consultant/consultant-annonces-afficher.html.twig', [
             'annonces' => $annonce ]);
     }
@@ -75,6 +77,8 @@ class ConsultantController extends AbstractController
         $annonce->setActive('1');
         $entityManager->persist($annonce);
         $entityManager->flush();
+
+        $this->addFlash('success', 'L\'annonce a bien été validée');
         return $this->redirectToRoute('app_consultant_annonces_afficher');
 
     }
@@ -97,7 +101,7 @@ class ConsultantController extends AbstractController
     {
 
         // valide la candidature
-        $candidature->setActive('1');
+        $candidature->setIsActive('1');
         $entityManager->persist($candidature);
         $entityManager->flush();
 
@@ -107,14 +111,16 @@ class ConsultantController extends AbstractController
         // envoyer email au recruteur
 
         $email = (new Email())
-            ->from('hahaddaoui@gmail.com')
-            ->to('hahaddaoui@gmail.com')
-            ->subject('nouvelle candidature')
-            ->text('Bonjour, nous avons une nouvelle candidature a vous proposer...');
+            ->from('hello@example.com')
+            ->to('you@example.com')
+            ->subject('Time for Symfony Mailer!')
+            ->text('Sending emails is fun again!');
+
 
         $mailer->send($email);
 
-        return $this->redirectToRoute('app_afficher_candidature', );
+        $this->addFlash('success', 'la candidature a bien été validée');
+        return $this->redirectToRoute('app_afficher_candidature' );
 
 
 

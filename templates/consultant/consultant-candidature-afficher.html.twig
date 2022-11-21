@@ -22,6 +22,10 @@
             </thead>
             <tbody>
             {% for candidature in candidatures %}
+                {% for message in app.flashes('success') %}
+                <div class="alert alert-success">{{ message }}</div>
+                {% endfor %}
+                {% if candidature.active == false %}
             <tr class="table-light">
                 <th scope="row">{{ candidature.poste }}</th>
                 <td>{{ candidature.lieuDeTravail }}</td>
@@ -31,6 +35,7 @@
                 <td>{{ candidature.candidatEmail }}</td>
                 <td><a class="btn btn-success" href="{{ path('app_valider_candidature', {id: candidature.id}) }}" role="button">Valider</a></td>
             </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>

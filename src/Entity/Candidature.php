@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CandidatureRepository::class)]
-#[UniqueEntity('email')]
+#[ORM\UniqueConstraint(fields: ['candidatEmail', 'annonce'])]
+
 
 class Candidature
 {
@@ -21,8 +23,6 @@ class Candidature
     #[ORM\OneToMany(mappedBy: 'candidature', targetEntity: Candidat::class)]
     private Collection $candidat;
 
-    #[ORM\OneToMany(mappedBy: 'candidature', targetEntity: Annonce::class)]
-    private Collection $annonce;
 
     #[ORM\Column(length: 255)]
     private ?string $poste = null;
@@ -39,22 +39,27 @@ class Candidature
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255, name: 'email')]
+    #[ORM\Column(length: 255)]
     private ?string $candidatEmail = null;
 
     #[ORM\ManyToOne(inversedBy: 'candidatures')]
     private ?Recruteur $recruteur = null;
 
-    #[ORM\Column]
-    private ?bool $active = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cv = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isActive = null;
+
+    #[ORM\Column(nullable: true, name: 'annonce')]
+    private ?int $annonce = null;
+
+
     public function __construct()
     {
         $this->candidat = new ArrayCollection();
-        $this->annonce = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -92,35 +97,7 @@ class Candidature
         return $this;
     }
 
-    /**
-     * @return Collection<int, Annonce>
-     */
-    public function getAnnonce(): Collection
-    {
-        return $this->annonce;
-    }
 
-    public function addAnnonce(Annonce $annonce): self
-    {
-        if (!$this->annonce->contains($annonce)) {
-            $this->annonce->add($annonce);
-            $annonce->setCandidature($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAnnonce(Annonce $annonce): self
-    {
-        if ($this->annonce->removeElement($annonce)) {
-            // set the owning side to null (unless already changed)
-            if ($annonce->getCandidature() === $this) {
-                $annonce->setCandidature(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getPoste(): ?string
     {
@@ -206,17 +183,7 @@ class Candidature
         return $this;
     }
 
-    public function isActive(): ?bool
-    {
-        return $this->active;
-    }
 
-    public function setActive(bool $active): self
-    {
-        $this->active = $active;
-
-        return $this;
-    }
 
     public function getCv(): ?string
     {
@@ -229,4 +196,35 @@ class Candidature
 
         return $this;
     }
+
+
+    public function isIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(?bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getAnnonce(): ?int
+    {
+        return $this->annonce;
+    }
+
+    public function setAnnonce(?int $annonce): self
+    {
+        $this->annonce = $annonce;
+
+        return $this;
+    }
+
+
+
+
+
+
 }
