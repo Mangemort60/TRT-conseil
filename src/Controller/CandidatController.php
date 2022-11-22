@@ -115,14 +115,14 @@ class CandidatController extends AbstractController
                 $candidature->setAnnonce($annonceID);
                 $entityManager->persist($candidature);
                 $entityManager->flush();
-
+                $this->addFlash('success', 'Votre candidature a bien été prise en compte !');
             } else {
                 $this->addFlash('errorProfilUncomplete', 'Veuillez devez compléter votre profil afin de pouvoir postuler à une annonce');
                 return $this->redirectToRoute('app_annonces');
             }
 
         } catch (\Exception $e) {
-            $this->addFlash('errorCandidatureDuplicate', 'Vous avez déjà postulé pour cette annonce');
+            $this->addFlash('errorCandidatureDuplicate', 'Vous avez déjà postulé à cette annonce');
             return $this->redirectToRoute('app_annonces');
         }
 

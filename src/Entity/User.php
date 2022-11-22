@@ -35,11 +35,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $Active = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $deletedAt = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $expiredAt = null;
+//    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+//    private ?\DateTimeInterface $deletedAt = null;
+//
+//    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+//    private ?\DateTimeInterface $expiredAt = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Candidat::class)]
     private Collection $candidat;
@@ -133,40 +133,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDeletedAt(): ?\DateTimeInterface
-    {
-        return $this->deletedAt;
-    }
+//    public function getDeletedAt(): ?\DateTimeInterface
+//    {
+//        return $this->deletedAt;
+//    }
+//
+//    public function setDeletedAt(?\DateTimeInterface $deletedAt): self
+//    {
+//        $this->deletedAt = $deletedAt;
+//
+//        return $this;
+//    }
+//
+//    public function getExpiredAt(): ?\DateTimeInterface
+//    {
+//        return $this->expiredAt;
+//    }
+//
+//    public function setExpiredAt(?\DateTimeInterface $expiredAt): self
+//    {
+//        $this->expiredAt = $expiredAt;
+//
+//        return $this;
+//    }
 
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): self
-    {
-        $this->deletedAt = $deletedAt;
-
-        return $this;
-    }
-
-    public function getExpiredAt(): ?\DateTimeInterface
-    {
-        return $this->expiredAt;
-    }
-
-    public function setExpiredAt(?\DateTimeInterface $expiredAt): self
-    {
-        $this->expiredAt = $expiredAt;
-
-        return $this;
-    }
-
-    public function isDeleted(): bool
-    {
-        return $this->deletedAt !== null;
-    }
-
-    public function isExpired(): bool
-    {
-        return $this->expiredAt !== null && $this->expiredAt < new \DateTime();
-
-    }
+//    public function isDeleted(): bool
+//    {
+//        return $this->deletedAt !== null;
+//    }
+//
+//    public function isExpired(): bool
+//    {
+//        return $this->expiredAt !== null && $this->expiredAt < new \DateTime();
+//
+//    }
 
     /**
      * @return Collection<int, Candidat>

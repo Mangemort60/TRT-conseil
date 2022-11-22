@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecruteurRepository::class)]
+#[ORM\UniqueConstraint(fields: ['user'])]
 class Recruteur
 {
     #[ORM\Id]

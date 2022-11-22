@@ -30,8 +30,6 @@ class Annonce
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $entreprise = null;
 
-    #[ORM\ManyToOne(inversedBy: 'annonce')]
-    private ?Candidature $candidature = null;
 
     #[ORM\ManyToOne(inversedBy: 'annonces')]
     private ?Recruteur $recruteur = null;
@@ -41,7 +39,6 @@ class Annonce
 
     public function __construct()
     {
-        $this->candidatures = new ArrayCollection();
     }
 
 
@@ -111,17 +108,6 @@ class Annonce
         return $this;
     }
 
-    public function getCandidature(): ?Candidature
-    {
-        return $this->candidature;
-    }
-
-    public function setCandidature(?Candidature $candidature): self
-    {
-        $this->candidature = $candidature;
-
-        return $this;
-    }
 
     public function getRecruteur(): ?Recruteur
     {
@@ -134,39 +120,6 @@ class Annonce
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, Candidature>
-     */
-    public function getCandidatures(): Collection
-    {
-        return $this->candidatures;
-    }
-
-    public function addCandidature(Candidature $candidature): self
-    {
-        if (!$this->candidatures->contains($candidature)) {
-            $this->candidatures->add($candidature);
-            $candidature->setAnnonce($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCandidature(Candidature $candidature): self
-    {
-        if ($this->candidatures->removeElement($candidature)) {
-            // set the owning side to null (unless already changed)
-            if ($candidature->getAnnonce() === $this) {
-                $candidature->setAnnonce(null);
-            }
-        }
-
-        return $this;
-    }
-
-
-
 
 
 }

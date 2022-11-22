@@ -22,7 +22,7 @@
             </thead>
             <tbody>
             {% for candidature in candidatures %}
-                {% if candidature.active == true %}
+                {% if candidature.isActive == true %}
                 <tr class="table-light">
                     <th scope="row">{{ candidature.poste }}</th>
                     <td>{{ candidature.lieuDeTravail }}</td>

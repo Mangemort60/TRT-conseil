@@ -52,7 +52,7 @@ class Candidature
     #[ORM\Column(nullable: true)]
     private ?bool $isActive = null;
 
-    #[ORM\Column(nullable: true, name: 'annonce')]
+    #[ORM\Column(nullable: true, name: 'annonce_id')]
     private ?int $annonce = null;
 
 

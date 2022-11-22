@@ -105,9 +105,6 @@ class ConsultantController extends AbstractController
         $entityManager->persist($candidature);
         $entityManager->flush();
 
-        // on recupere nom , prenom , cv du candidat
-
-
         // envoyer email au recruteur
 
         $email = (new Email())
@@ -116,9 +113,13 @@ class ConsultantController extends AbstractController
             ->subject('Time for Symfony Mailer!')
             ->text('Sending emails is fun again!');
 
-
+    try{
         $mailer->send($email);
-
+    }
+    catch (TransportExceptionInterface $e) {
+        // some error prevented the email sending; display an
+        // error message or try to resend the message
+    }
         $this->addFlash('success', 'la candidature a bien été validée');
         return $this->redirectToRoute('app_afficher_candidature' );
 

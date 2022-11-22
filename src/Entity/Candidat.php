@@ -11,7 +11,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: CandidatRepository::class)]
 #[Vich\Uploadable]
-#[UniqueEntity("user")]
+#[ORM\UniqueConstraint(fields: ['user'])]
 
 class Candidat
 {
@@ -35,10 +35,6 @@ class Candidat
 
     #[ORM\ManyToOne(inversedBy: 'candidat')]
     private ?User $user = null;
-
-    #[ORM\ManyToOne(inversedBy: 'candidat')]
-    private ?Candidature $candidature = null;
-
 
     public function __construct()
     {
@@ -111,18 +107,6 @@ public function getUser(): ?User
 public function setUser(?User $user): self
 {
     $this->user = $user;
-
-    return $this;
-}
-
-public function getCandidature(): ?Candidature
-{
-    return $this->candidature;
-}
-
-public function setCandidature(?Candidature $candidature): self
-{
-    $this->candidature = $candidature;
 
     return $this;
 }

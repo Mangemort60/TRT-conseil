@@ -25,7 +25,7 @@
                 {% for message in app.flashes('success') %}
                 <div class="alert alert-success">{{ message }}</div>
                 {% endfor %}
-                {% if candidature.active == false %}
+                {% if candidature.isActive == false %}
             <tr class="table-light">
                 <th scope="row">{{ candidature.poste }}</th>
                 <td>{{ candidature.lieuDeTravail }}</td>
