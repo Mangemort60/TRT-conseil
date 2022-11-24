@@ -20,7 +20,7 @@
         {#          loop.index pour alterner les couleurs du tableau#}
 
         <tr class="table-light">
-            {% if user.roles != ["ROLE_ADMIN", "ROLE_USER"] and user.active == false %}
+            {% if user.roles != ["ROLE_ADMIN", "ROLE_CONSULTANT"] and user.active == false %}
             <th scope="row">{{ user.email }}</th>
             <th scope="col">{% if user.active %} activé {% else%} en attente {% endif %}</th>
             <th><a class="btn btn-success" href="{{path('app_valider_comptes', {id: user.id})}}" role="button">activer</a></th>
