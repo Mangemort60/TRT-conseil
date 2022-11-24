@@ -6,7 +6,7 @@
 <div class="container d-flex flex-column">
     <h1 class="text-center m-4">Offres d'emploi</h1>
 
-    {% for message in app.flashes('errorProfilUncomplete') %}
+    {% for message in app.flashes('errorProfilCandidat') %}
     <div class="alert alert-danger">
         {{ message }} : <a href="{{ path('app_profil_candidat') }}"> Compléter mon profil </a>
     </div>
@@ -22,6 +22,7 @@
             {{ message }}
         </div>
     {% endfor %}
+
     <table class="table table-hover">
         <thead>
         <tr>

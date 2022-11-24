@@ -68,23 +68,30 @@ class RecruteurController extends AbstractController
         $form = $this->createForm(AnnonceType::class, $annonce);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $form->getData();
+        try {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $form->getData();
 
-            $userId = $user->getID();
-            $recruteur = $recruteurRepository->findOneBySomeField($userId);
-            $recruteurNom = $recruteur->getNomEntreprise();
-            $annonce->setRecruteur($recruteur);
-            $annonce->setEntreprise($recruteurNom);
-            $entityManager->persist($annonce);
-            $entityManager->flush();
-            return $this->redirectToRoute('app_annonces');
+                $userId = $user->getID();
+                $recruteur = $recruteurRepository->findOneBySomeField($userId);
+                $recruteurNom = $recruteur->getNomEntreprise();
+                $annonce->setRecruteur($recruteur);
+                $annonce->setEntreprise($recruteurNom);
+                $entityManager->persist($annonce);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_annonces');
 
-        } else {
-            return $this->renderForm('annonce/ajouter.html.twig', [
-                'form' => $form,
-            ]);
+            } else {
+                return $this->renderForm('annonce/ajouter.html.twig', [
+                    'form' => $form,
+                ]);
+            }
+        } catch (\Throwable $t) {
+
+            $this->addFlash('errorProfilRecruteur', 'Veuillez completer votre profil afin de poster une annonce');
+            return $this->redirectToRoute('app_recruteur_ajouter_annonce');
         }
+
         
 
 

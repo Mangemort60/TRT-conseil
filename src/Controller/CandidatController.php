@@ -117,7 +117,7 @@ class CandidatController extends AbstractController
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre candidature a bien été prise en compte !');
             } else {
-                $this->addFlash('errorProfilUncomplete', 'Veuillez devez compléter votre profil afin de pouvoir postuler à une annonce');
+                $this->addFlash('errorProfilCandidat', 'Veuillez devez compléter votre profil afin de pouvoir postuler à une annonce');
                 return $this->redirectToRoute('app_annonces');
             }
 
