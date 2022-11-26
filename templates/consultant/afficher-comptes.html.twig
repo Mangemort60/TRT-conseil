@@ -57,9 +57,10 @@
                     <th scope="col">{% if user.active %} activé {% else%} en attente {% endif %}</th>
                     {% elseif 'ROLE_RECRUTEUR' in user.getroles and user.active == true %}
                     <th scope="row">{{ user.email }}</th>
-                    <th><a class="btn btn-danger" href="{{path('app_desactiver_comptes', {id: user.id})}}" role="button">désactiver</a></th>
+
                     <th scope="col">{% if user.active %} activé {% else%} en attente {% endif %}</th>
-                    <th><a class="btn btn-danger" href="{{path('app_desactiver_comptes', {id: user.id})}}" role="button">désactiver</a></th>
+                        <th><a class="btn btn-danger" href="{{path('app_desactiver_comptes', {id: user.id})}}" role="button">désactiver</a></th>
+
 
 
                 {% endif %}
