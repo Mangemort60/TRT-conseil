@@ -9,7 +9,7 @@
         <tr>
             <th scope="col">EMAIL</th>
             <th scope="col">STATUT</th>
-            <th scope="col">Action</th>
+            <th scope="col">ACTION</th>
 
         </tr>
         </thead>
@@ -53,13 +53,12 @@
             <tr class="table-light">
                 {% if ('ROLE_CANDIDAT' ) in user.getroles and user.active == true %}
                     <th scope="row">{{ user.email }}</th>
-                    <th><a class="btn btn-danger" href="{{path('app_desactiver_comptes', {id: user.id})}}" role="button">désactiver</a></th>
                     <th scope="col">{% if user.active %} activé {% else%} en attente {% endif %}</th>
+                    <th><a class="btn btn-danger" href="{{path('app_desactiver_comptes', {id: user.id})}}" role="button">désactiver</a></th>
                     {% elseif 'ROLE_RECRUTEUR' in user.getroles and user.active == true %}
                     <th scope="row">{{ user.email }}</th>
-
                     <th scope="col">{% if user.active %} activé {% else%} en attente {% endif %}</th>
-                        <th><a class="btn btn-danger" href="{{path('app_desactiver_comptes', {id: user.id})}}" role="button">désactiver</a></th>
+                    <th><a class="btn btn-danger" href="{{path('app_desactiver_comptes', {id: user.id})}}" role="button">désactiver</a></th>
 
 
 
