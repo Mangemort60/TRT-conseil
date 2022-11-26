@@ -20,11 +20,14 @@
         {#          loop.index pour alterner les couleurs du tableau#}
 
         <tr class="table-light">
-            {% if 'ROLE_CANDIDAT' in user.getroles  and user.active == false %}
+            {% if ('ROLE_CANDIDAT') in user.getroles  and user.active == false %}
             <th scope="row">{{ user.email }}</th>
             <th scope="col">{% if user.active %} activé {% else%} en attente {% endif %}</th>
             <th><a class="btn btn-success" href="{{path('app_valider_comptes', {id: user.id})}}" role="button">activer</a></th>
-
+            {% elseif 'ROLE_RECRUTEUR' in user.getroles %}
+                <th scope="row">{{ user.email }}</th>
+                <th scope="col">{% if user.active %} activé {% else%} en attente {% endif %}</th>
+                <th><a class="btn btn-success" href="{{path('app_valider_comptes', {id: user.id})}}" role="button">activer</a></th>
             {% endif %}
         </tr>
 

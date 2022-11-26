@@ -123,7 +123,5 @@ class ConsultantController extends AbstractController
         $this->addFlash('success', 'la candidature a bien été validée');
         return $this->redirectToRoute('app_afficher_candidature' );
 
-
-
     }
 }
