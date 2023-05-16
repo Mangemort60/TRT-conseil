@@ -100,7 +100,7 @@ class CandidatController extends AbstractController
                 $candidatNom = $candidatLoggedIn->getNom();
                 $candidatPrenom = $candidatLoggedIn->getPrenom();
                 $candidatEmail = $user->getUserIdentifier();
-                $candidatCv = $candidatLoggedIn->getCvName();
+                $candidatCv = $candidatLoggedIn->getCvFile();
 
                 // nouvelle candidature
                 $candidature = new Candidature();
